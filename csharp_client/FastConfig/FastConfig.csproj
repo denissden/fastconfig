@@ -1,9 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <!-- nuget properties -->
+  <PropertyGroup>
+    <Version>0.1.0</Version>
+    <PackageId>FastConfig</PackageId>
+    <Authors>denissden</Authors>
+		<Description>Client for FastConfig configuration server</Description>
+		<RepositoryUrl>https://github.com/denissden/fastconfig.git</RepositoryUrl>
+		<IncludeSymbols>true</IncludeSymbols>
+		<IncludeSource>true</IncludeSource>
+		<LangVersion>latest</LangVersion>
+    <Tags>configuration</Tags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="6.0"/>
+  </ItemGroup>
 
 </Project>
