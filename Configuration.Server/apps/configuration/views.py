@@ -67,7 +67,7 @@ def all_config_handler():
     return json.dumps(all_configuration)
 
 
-@configuration.route("/token/<app_id>/new", methods=["PUT"])
+@configuration.route("/token/<app_id>/new", methods=["GET"])
 def token_handler(app_id: str):
     if not master_token_valid():
         return "Invalid token", 401

@@ -1,0 +1,53 @@
+### Change server address if needed
+@address = http://localhost:5000
+### Server will print out the master token on first run
+### Insert the token below to be able to make requests
+@master_token = insert master token here
+
+### Create a token for an app named 'chat'
+### Insert received token below
+GET http://localhost:5000/token/chat/new
+token: {{master_token}}
+
+@chat_app_token = insert token here
+
+### Right now configuration is empty
+GET {{address}}/configuration/chat
+token: {{chat_app_token}}
+
+### Let's send some configuration
+PUT http://localhost:5000/configuration/chat
+token: {{chat_app_token}}
+
+{
+    "chat_key": "chat_value"
+}
+
+### Now we can get the configuration we stored previously
+GET {{address}}/configuration/chat
+token: {{chat_app_token}}
+
+### Let's create a token for another app 
+GET http://localhost:5000/token/store_backend/new
+token: {{master_token}}
+
+@store_backend_token = insert token here
+### Send the configuration
+PUT http://localhost:5000/configuration/store_backend
+token: {{store_backend_token}}
+
+{
+    "Connection": {
+        "Database": "test",
+        "Rabbit": "testrabbit"
+    },
+    "Logging": "Debug"
+}
+### You can get the configuration the same way 
+### as the first one, just don't forget 
+### to change the app name and the token
+
+### You also can get all stored configurations using the master token
+### Just don't specify and app name
+GET http://localhost:5000/configuration
+token: {{master_token}}
