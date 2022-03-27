@@ -11,11 +11,12 @@
     <Version>0.1.0</Version>
     <PackageId>FastConfig</PackageId>
     <Authors>denissden</Authors>
-		<Description>Client for FastConfig configuration server</Description>
-		<RepositoryUrl>https://github.com/denissden/fastconfig.git</RepositoryUrl>
-		<IncludeSymbols>true</IncludeSymbols>
-		<IncludeSource>true</IncludeSource>
-		<LangVersion>latest</LangVersion>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Description>Client for FastConfig configuration server</Description>
+    <RepositoryUrl>https://github.com/denissden/fastconfig.git</RepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSource>true</IncludeSource>
+    <LangVersion>latest</LangVersion>
     <Tags>configuration</Tags>
   </PropertyGroup>
 
