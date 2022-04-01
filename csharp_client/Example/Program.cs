@@ -1,4 +1,4 @@
-﻿string token = "7bd93468-3b23-4aa1-b088-d68f945f299c"; // insert token here
+﻿string token = ""; // insert token here
 if (string.IsNullOrEmpty(token))
 {
     throw new ArgumentException("Please insert a token");
