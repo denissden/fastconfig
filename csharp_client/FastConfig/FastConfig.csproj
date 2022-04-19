@@ -8,7 +8,7 @@
 
   <!-- nuget properties -->
   <PropertyGroup>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <PackageId>FastConfig</PackageId>
     <Authors>denissden</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -21,7 +21,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="6.0"/>
+    <PackageReference Include="microsoft.extensions.dependencyinjection" Version="6.0.0" />
+    <PackageReference Include="System.Text.Json" Version="6.0" />
   </ItemGroup>
 
 </Project>

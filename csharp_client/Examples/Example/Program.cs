@@ -1,22 +1,19 @@
 ﻿string token = ""; // insert token here
 if (string.IsNullOrEmpty(token))
 {
-    throw new ArgumentException("Please insert a token");
+  throw new ArgumentException("Please insert a token");
 }
 string address = "http://localhost:5000/";
 string appId = "chat";
 
 var client = new FastConfig.FastConfigClient(address, appId, token);
 
-// create and send config
-var config = new Example.Config();
-config.ServiceId = 1337;
-config.Connections.Database = "server=postgre;password=password";
-config.Connections.RabbitMQ = "server=localhost:5672;password=password";
-config.Urls.Api = "https://someapi.com/";
-config.Urls.Auth = "https://auth.someserver.com/";
-await client.SendConfig(config);
-Console.WriteLine("Config sent");
+if (Example.Ask.YesNo("Do you want to create an example config?"))
+{
+  var config = Example.CreateConfig.Create();
+  await client.SendConfig(config);
+  Console.WriteLine("Config sent");
+}
 
 // get config
 Console.WriteLine("Getting config");

@@ -1,7 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\FastConfig\FastConfig.csproj" />
+    <PackageReference Include="microsoft.extensions.hosting" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\FastConfig\FastConfig.csproj" />
+    <ProjectReference Include="..\Example\Example.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
