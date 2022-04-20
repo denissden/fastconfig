@@ -14,7 +14,7 @@ public class ConfigService : IHostedService
   public async Task StartAsync(CancellationToken cancellationToken)
   {
     Console.WriteLine("Getting config from service...");
-    var config = await _client.GetConfig<Example.Config>();
+    var config = await _client.Get<Example.Config>();
     Console.WriteLine("-----Received config in service-----");
     Console.WriteLine(config);
     Console.WriteLine("------------------------------------");

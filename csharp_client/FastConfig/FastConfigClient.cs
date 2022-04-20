@@ -51,7 +51,7 @@ public class FastConfigClient
   /// <summary>
   /// Create a new <see cref="FastConfigClient"/>
   /// from environment variables.
-  /// If parameter is passed, it is not loaded from environment.
+  /// Passes parameters override environment variables.
   /// </summary>
   /// <param name="address">Server address</param>
   /// <param name="appId">Application name/id</param>
@@ -87,7 +87,7 @@ public class FastConfigClient
   /// Get configuration
   /// </summary>
   /// <returns>Json configuration as string</returns>
-  public async Task<string> GetConfig()
+  public async Task<string> Get()
   {
     var res = await _httpClient.GetAsync(_configAddress);
     res.EnsureSuccessStatusCode();
@@ -98,9 +98,9 @@ public class FastConfigClient
   /// Get configuration
   /// </summary>
   /// <returns>Deserialized json configuration</returns>
-  public async Task<T?> GetConfig<T>() where T : class
+  public async Task<T?> Get<T>() where T : class
   {
-    var string_content = await GetConfig();
+    var string_content = await Get();
     return JsonSerializer.Deserialize<T>(string_content);
   }
 
@@ -108,7 +108,7 @@ public class FastConfigClient
   /// Send configuration as json string
   /// </summary>
   /// <param name="config"></param>
-  public async Task SendConfig(string config)
+  public async Task Send(string config)
   {
     var content = new StringContent(config, Encoding.UTF8, "application/json");
     var res = await _httpClient.PutAsync(_configAddress, content);
@@ -120,9 +120,9 @@ public class FastConfigClient
   /// </summary>
   /// <param name="config">Configuration class instance</param>
   /// <typeparam name="T">Configuration class</typeparam>
-  public async Task SendConfig<T>(T config) where T : class
+  public async Task Send<T>(T config) where T : class
   {
     var string_content = JsonSerializer.Serialize(config);
-    await SendConfig(string_content);
+    await Send(string_content);
   }
 }

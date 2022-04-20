@@ -22,14 +22,13 @@ var fastConfig = FastConfigClient.FromEnvironment(
 if (Example.Ask.YesNo("Do you want to create an example config?"))
 {
   var config = Example.CreateConfig.Create();
-  await fastConfig.SendConfig(config);
+  await fastConfig.Send(config);
   Console.WriteLine("Config sent");
 }
 
-// get configuration before configuring services
-// may be useful to get connection strings
+// you may want to get the configuration before configuring the host
 Console.WriteLine("Getting config before building the host...");
-var appConfig = await fastConfig.GetConfig<Example.Config>();
+var appConfig = await fastConfig.Get<Example.Config>();
 Console.WriteLine("-----Received config-----");
 Console.WriteLine(appConfig);
 Console.WriteLine("-------------------------");
@@ -38,29 +37,7 @@ var host = Host
   .CreateDefaultBuilder()
   .ConfigureServices((context, services) =>
   {
-    // add an existing FastConfigClient
     services.AddFastConfig(fastConfig);
-
-    // create and add a new FastConfigClient 
-    services.AddFastConfig(
-      address: address,
-      appId: appId,
-      token: token
-    );
-
-    // create and add a new FastConfigClient with 
-    // address, appId and token stored in environment variables 
-    // services.AddFastConfig();
-    /* results in exception if there are no needed environment variables */
-
-
-    // create and add a new FastConfigClient with 
-    // only token stored in environment variables 
-    // services.AddFastConfig(
-    //   address: address,
-    //   appId: appId
-    // );
-    /* results in exception if there are no needed environment variables */
 
     // this service will receive a configuration
     services.AddHostedService<HostExample.ConfigService>();

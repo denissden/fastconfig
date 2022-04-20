@@ -11,13 +11,13 @@ var client = new FastConfig.FastConfigClient(address, appId, token);
 if (Example.Ask.YesNo("Do you want to create an example config?"))
 {
   var config = Example.CreateConfig.Create();
-  await client.SendConfig(config);
+  await client.Send(config);
   Console.WriteLine("Config sent");
 }
 
 // get config
 Console.WriteLine("Getting config");
-var received = await client.GetConfig<Example.Config>();
+var received = await client.Get<Example.Config>();
 Console.WriteLine("-----Config-----");
 Console.WriteLine(received);
 Console.WriteLine("----------------");
