@@ -13,7 +13,7 @@
     <Authors>denissden</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>Client for FastConfig configuration server</Description>
-    <RepositoryUrl>https://github.com/denissden/fastconfig.git</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile><RepositoryUrl>https://github.com/denissden/fastconfig.git</RepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <IncludeSource>true</IncludeSource>
     <LangVersion>latest</LangVersion>
