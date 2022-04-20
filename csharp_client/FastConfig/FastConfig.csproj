@@ -25,4 +25,11 @@
     <PackageReference Include="System.Text.Json" Version="6.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="..\README.md">
+      <Pack>true</Pack>
+      <PackagePath>\</PackagePath>
+    </Content>
+  </ItemGroup>
+
 </Project>
