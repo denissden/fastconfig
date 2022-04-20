@@ -1,6 +1,19 @@
 # FastConfig
 Store configurations for multiple applications in one place
 
+- [FastConfig](#fastconfig)
+  - [Quick start](#quick-start)
+        - [1. install dependencies](#1-install-dependencies)
+        - [2. start the server](#2-start-the-server)
+        - [3. create a token for an app](#3-create-a-token-for-an-app)
+        - [4. send configuration](#4-send-configuration)
+        - [5. get configuration](#5-get-configuration)
+  - [Server configuration](#server-configuration)
+  - [API](#api)
+      - [Tokens](#tokens)
+      - [Requests](#requests)
+  - [Clients](#clients)
+
 ## Quick start
 
 ##### 1. install dependencies
@@ -9,7 +22,7 @@ Store configurations for multiple applications in one place
 ##### 2. start the server
 Run `serve.py --environment prod`.
 On the first run a *master token* will be printed. 
-If you lost the master token you can find it in [storage/__tokens.json](server/storage/__tokens.json)
+If you lost the master token you can find it in [storage/__tokens.json](server/storage/__tokens.json) (link only works locally)
 
 ##### 3. create a token for an app
 You can use any http client like [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) to work with API
