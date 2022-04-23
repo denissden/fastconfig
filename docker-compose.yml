@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  fastconfig:
+    image: fastconfig-server
+    build:
+      context: server
+      dockerfile: server/Dockerfile
+    ports:
+      - "5000:5000"
