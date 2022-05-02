@@ -233,6 +233,7 @@ class App(tk.Tk):
     
     def on_close(self):
         self.config.save()
+        self.quit()
 
 if __name__ == '__main__':
     if not os.path.exists(CONFIG_FILE):
