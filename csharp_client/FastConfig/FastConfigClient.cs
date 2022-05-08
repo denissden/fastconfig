@@ -17,6 +17,7 @@ public class FastConfigClient
   /// </summary>
   public const string EnvToken = "FASTCONFIG_TOKEN";
   private readonly HttpClient _httpClient = new HttpClient();
+  private readonly JsonSerializerOptions _options;
   /// <summary>
   /// Server address
   /// </summary>
@@ -40,12 +41,17 @@ public class FastConfigClient
   /// <param name="address">Server address</param>
   /// <param name="appId">Application name/id</param>
   /// <param name="token">Access token</param>
-  public FastConfigClient(string address, string appId, string token)
+  /// <param name="serializerOptions">
+  /// Provides options to be used with JsonSerializer
+  /// </param>
+  public FastConfigClient(string address, string appId, string token,
+    JsonSerializerOptions? serializerOptions = null)
   {
     Address = address;
     AppId = appId;
     Token = token;
     _httpClient.DefaultRequestHeaders.Add("token", Token);
+    _options = serializerOptions ?? new JsonSerializerOptions();
   }
 
   /// <summary>
@@ -56,12 +62,15 @@ public class FastConfigClient
   /// <param name="address">Server address</param>
   /// <param name="appId">Application name/id</param>
   /// <param name="token">Access token</param>
+  /// <param name="serializerOptions">
+  /// Provides options to be used with JsonSerializer
+  /// </param>
   /// <returns>Instance of <see cref="FastConfigClient"/></returns>
   public static FastConfigClient FromEnvironment(
       string? address = null,
       string? appId = null,
-      string? token = null
-      )
+      string? token = null,
+      JsonSerializerOptions? serializerOptions = null)
   {
     if (address is null)
     {
@@ -78,7 +87,7 @@ public class FastConfigClient
       token = Environment.GetEnvironmentVariable(EnvToken)
       ?? throw new ArgumentException("Token is null");
     }
-    return new FastConfigClient(address, appId, token);
+    return new FastConfigClient(address, appId, token, serializerOptions);
   }
 
   private Uri _configAddress => new Uri(_address, $"configuration/{AppId}");
@@ -101,7 +110,7 @@ public class FastConfigClient
   public async Task<T?> Get<T>() where T : class
   {
     var string_content = await Get();
-    return JsonSerializer.Deserialize<T>(string_content);
+    return JsonSerializer.Deserialize<T>(string_content, _options);
   }
 
   /// <summary>
@@ -122,7 +131,7 @@ public class FastConfigClient
   /// <typeparam name="T">Configuration class</typeparam>
   public async Task Send<T>(T config) where T : class
   {
-    var string_content = JsonSerializer.Serialize(config);
+    var string_content = JsonSerializer.Serialize(config, _options);
     await Send(string_content);
   }
 }
