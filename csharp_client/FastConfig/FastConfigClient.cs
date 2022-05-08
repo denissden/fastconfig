@@ -17,7 +17,7 @@ public class FastConfigClient
   /// </summary>
   public const string EnvToken = "FASTCONFIG_TOKEN";
   private readonly HttpClient _httpClient = new HttpClient();
-  private readonly JsonSerializerOptions _options = new JsonSerializerOptions();
+  private readonly JsonSerializerOptions _options;
   /// <summary>
   /// Server address
   /// </summary>
@@ -41,18 +41,17 @@ public class FastConfigClient
   /// <param name="address">Server address</param>
   /// <param name="appId">Application name/id</param>
   /// <param name="token">Access token</param>
-  /// <param name="namingPolicy">
-  /// Naming policy for JSON Serialize/Desiaralize
+  /// <param name="serializerOptions">
+  /// Provides options to be used with JsonSerializer
   /// </param>
   public FastConfigClient(string address, string appId, string token,
-    JsonNamingPolicy? namingPolicy = null)
+    JsonSerializerOptions? serializerOptions = null)
   {
     Address = address;
     AppId = appId;
     Token = token;
     _httpClient.DefaultRequestHeaders.Add("token", Token);
-    if (namingPolicy != null)
-      _options.PropertyNamingPolicy = namingPolicy;
+    _options = serializerOptions ?? new JsonSerializerOptions();
   }
 
   /// <summary>
@@ -63,15 +62,15 @@ public class FastConfigClient
   /// <param name="address">Server address</param>
   /// <param name="appId">Application name/id</param>
   /// <param name="token">Access token</param>
-  /// <param name="namingPolicy">
-  /// Naming policy for JSON Serialize/Desiaralize
+  /// <param name="serializerOptions">
+  /// Provides options to be used with JsonSerializer
   /// </param>
   /// <returns>Instance of <see cref="FastConfigClient"/></returns>
   public static FastConfigClient FromEnvironment(
       string? address = null,
       string? appId = null,
       string? token = null,
-      JsonNamingPolicy? namingPolicy = null)
+      JsonSerializerOptions? serializerOptions = null)
   {
     if (address is null)
     {
@@ -88,7 +87,7 @@ public class FastConfigClient
       token = Environment.GetEnvironmentVariable(EnvToken)
       ?? throw new ArgumentException("Token is null");
     }
-    return new FastConfigClient(address, appId, token, namingPolicy);
+    return new FastConfigClient(address, appId, token, serializerOptions);
   }
 
   private Uri _configAddress => new Uri(_address, $"configuration/{AppId}");
