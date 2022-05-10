@@ -4,6 +4,6 @@ from ..core.dependencies import *
 router = APIRouter()
 
 
-@router.get("/config/{full_path:path}")
+@router.get("/{full_path:path}")
 def get_folder(full_path: str, folders: FolderService = Depends(FolderService)):
     folders.create(full_path)
