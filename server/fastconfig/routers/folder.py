@@ -13,7 +13,7 @@ async def get_folder(request: Request, full_path: str, util: Util = Depends()):
     else:
         request_json = await request.json()
     path = util.parse_path(full_path)
-    res = await util.get_path_tree(path)
+    res = await util.get_dict(path)
     return res
 
 
@@ -22,5 +22,5 @@ async def update_folder(request: Request, full_path: str, util: Util = Depends()
     request_json = await request.json()
     location = util.parse_path(full_path)
     util.parse_dict(request_json, location)
-    await util.save_dict_tree(request_json, location)
+    await util.put_dict(request_json, location)
     return
