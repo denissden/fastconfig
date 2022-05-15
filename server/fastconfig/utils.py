@@ -1,16 +1,16 @@
 import re
-from tkinter.messagebox import NO
 from typing import List
 from fastapi import Depends, HTTPException
 from sqlalchemy import select, delete
 from sqlalchemy.orm import selectinload
 from sqlalchemy.orm.session import Session
+from pydantic import BaseModel
 from .dependencies import get_db
 from .database import models
 
 allowed_characters = re.compile("^[A-Za-z0-9_.-]+$")
 def check_allowed_characters(string: str):
-    return bool(allowed_characters)
+    return bool(allowed_characters.match(string))
 
 class ItemCollection:
     def __init__(self, db: Session = Depends(get_db)) -> None:
@@ -85,10 +85,11 @@ class Util:
     @staticmethod
     def parse_path(url_path: str):
         parts = url_path.split("/")
-        for p in parts:
+        non_empty = list(filter(None, parts))
+        for p in non_empty:
             if not check_allowed_characters(p):
                 raise HTTPException(400, f"Invalid path name: {p}")
-        return list(filter(None, parts))
+        return non_empty
     
     async def get_item(self, name: str, parent_id: int = None) -> models.Item:
         command = select(models.Item).where(models.Item.name == name)
@@ -132,7 +133,11 @@ class Util:
             else:
                 print("value " + str(value))
     
-    async def put_dict_rec(self, dict_: dict, parent_id: int):
+    async def put_dict_rec(self, dict_: dict[str, models.Item], parent_id: int):
+
+        items = dict_.items()
+        normal = {k: v for k, v in items if not k.startswith("__")}
+
         for name, value in dict_.items():
             if name.startswith("__"):
                 continue
@@ -177,20 +182,65 @@ class Util:
         children = await self.items.get_children(id_)
 
         if not children:
-            return root_item.value
+            value = root_item.value
+            templated = await self.template_string(value)
+            return templated
 
         dict_ = dict()
         for c in children:
             dict_[c.name] = await self.get_dict_rec(c)
         return dict_
 
-    
     async def get_dict(self, location: List[str] = None):
         item = None
-        if location is not None:
+        if location:
             item = await self.get_item_by_path(location)
+            if item is None:
+                raise HTTPException(404)
         
         return await self.get_dict_rec(item)
         
+    async def template_string(self, string: str) -> str:
+        # {{secrets/db/chat}}
+        async def get_token_value(token: str):
+            path = self.parse_path(token)
+            item = await self.get_item_by_path(path)
+            if item is not None:
+                print("value", item.value)
+                return item.value
+            else:
+                return "{{not found}}"
+
+        result = []
+        braces_count = 0
+        current_token = ""
+        for char in string:
+            if char == '{':
+                braces_count += 1
+            elif char == '}':
+                braces_count -= 1
+                result.append(await get_token_value(current_token))
+                current_token = ''
+            elif braces_count == 1:
+                current_token += char
+            else:
+                result.append(char)
         
+        return ''.join(result)
+    
+    async def delete_rec(self, root_item: models.Item):
+        id_ = root_item.id
+        children = await self.items.get_children(id_)
             
+        for c in children:
+            await self.delete_rec(c)
+        
+        await self.items.delete(id_)
+    
+    async def delete(self, location: List[str] = None):
+        item = await self.get_item_by_path(location)
+        if item is None:
+            raise HTTPException(404)
+
+        await self.delete_rec(item)   
+        await self.items.commit()     
